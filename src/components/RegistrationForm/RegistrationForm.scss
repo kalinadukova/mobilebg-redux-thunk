@@ -1,0 +1,19 @@
+.registration-form {
+  display: flex;
+  width: 400px;
+  flex-wrap: wrap;
+  gap: 30px;
+
+  .registration-form-child {
+    width: 100%;
+  }
+
+  .name-field {
+    width: 46%;
+  }
+
+  .link-child,
+  .copyright {
+    text-align: center;
+  }
+}

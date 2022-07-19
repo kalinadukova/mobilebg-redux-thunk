@@ -1,0 +1,22 @@
+.login-form {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  gap: 30px;
+  margin: 0;
+  padding: 0;
+
+  .login-form-child {
+    width: 100%;
+    align-self: center;
+  }
+
+  .link-child,
+  & .copyright {
+    text-align: center;
+  }
+
+  .img {
+    width: 200px;
+  }
+}
