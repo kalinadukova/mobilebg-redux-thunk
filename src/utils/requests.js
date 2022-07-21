@@ -22,16 +22,19 @@ export async function login(userData) {
     }),
   };
 
-  const res = await fetch("http://207.154.210.226/users/login", options);
-
-  if (res.status === 401) {
-    throw new Error("Password is incorrect!");
+  try {
+    const res = await fetch("http://207.154.210.226/users/login", options);
+    if (res.status === 401) {
+      throw new Error("Password is incorrect!");
+    }
+    if (res.status === 500) {
+      throw new Error("No such user!");
+    }
+    const userInfo = await res.json();
+    return userInfo;
+  } catch (error) {
+    throw error.message;
   }
-
-  if (res.status === 500) {
-    throw new Error("No such user!");
-  }
-  return await res.json();
 }
 
 export async function getCarsArray() {
@@ -49,10 +52,18 @@ export async function addCar(data, token) {
     body: JSON.stringify(data),
   };
 
-  const res = await fetch("http://207.154.210.226/cars", options);
+  try {
+    const res = await fetch("http://207.154.210.226/cars", options);
 
-  const carData = await res.json();
-  return carData;
+    if (res.status !== 200) {
+      throw new Error(res.statusText);
+    }
+    const carData = await res.json();
+    return carData;
+  } catch (error) {
+    console.log(error);
+    throw error.message;
+  }
 }
 
 export async function updateCar(newCarData, userId, token) {
@@ -64,9 +75,17 @@ export async function updateCar(newCarData, userId, token) {
     },
     body: JSON.stringify(newCarData),
   };
-  const res = await fetch(`http://207.154.210.226/cars/${userId}`, options);
-  const data = await res.json();
-  return data;
+
+  try {
+    const res = await fetch(`http://207.154.210.226/cars/${userId}`, options);
+    if (res.status !== 200) {
+      throw new Error(res.statusText);
+    }
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    throw error.message;
+  }
 }
 
 export async function deleteCar(carId, userId, token) {
@@ -76,6 +95,12 @@ export async function deleteCar(carId, userId, token) {
       Authorization: "Bearer " + token,
     },
   });
-
-  return res;
+  try {
+    if (res.status !== 200) {
+      throw new Error(res.statusText);
+    }
+    return res;
+  } catch (error) {
+    throw error.message;
+  }
 }

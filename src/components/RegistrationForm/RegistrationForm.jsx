@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 
 import { login, register } from "../../utils/requests";
 
-import { signInAction } from "../../store/user/user.actions";
+import { userLoginAsync } from "../../store/user/user.actions";
 
 import "./RegistrationForm.scss";
 
@@ -62,7 +62,7 @@ export default function RegistrationForm() {
         password,
       });
 
-      dispatch(signInAction(userInfo));
+      dispatch(userLoginAsync(userInfo));
 
       navigation("/catalog");
     } catch (error) {
@@ -105,7 +105,7 @@ export default function RegistrationForm() {
         SIGN UP
       </Button>
 
-      {error === "" ? null : <div style={{ color: "red" }}>{error}</div>}
+      {error && <div style={{ color: "red" }}>{error}</div>}
 
       <Link to="/login" className="registration-form-child link-child">
         Already have an account? Sign in

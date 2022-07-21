@@ -10,13 +10,14 @@ import carImg from "../../assets/car-img.png";
 
 import "./LoginForm.scss";
 
-import { signInAction } from "../../store/user/user.actions";
-import { login } from "../../utils/requests";
+import { userLoginAsync } from "../../store/user/user.actions";
 import { useState } from "react";
+import { selectCurrentUser } from "../../store/user/user.selector";
 
 export default function LoginForm() {
-  const dispatch = useDispatch();
   const [error, setError] = useState();
+  const currentUser = useSelector(selectCurrentUser);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   async function onHandleSubmit(event) {
@@ -47,11 +48,9 @@ export default function LoginForm() {
 
       event.target.reset();
 
-      const userInfo = await login(userData);
+      dispatch(userLoginAsync(userData));
 
-      dispatch(signInAction(userInfo));
-
-      navigate("/catalog");
+      if (currentUser.user) navigate("/catalog");
     } catch (error) {
       setError(error.message);
     }
@@ -76,7 +75,7 @@ export default function LoginForm() {
         SIGN IN
       </Button>
 
-      {error === "" ? null : <div style={{ color: "red" }}>{error}</div>}
+      {error && <div style={{ color: "red" }}>{error}</div>}
 
       <Link to="/register" className="login-form-child link-child">
         Don't have an account?

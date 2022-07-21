@@ -18,7 +18,7 @@ export default function Table() {
   const columns = [
     { title: "Make", field: "make" },
     { title: "Model", field: "model" },
-    { title: "Year", field: "year" },
+    { title: "Year", field: "year", type: "numeric" },
     {
       title: "Engine Type",
       field: "engineType",
@@ -39,11 +39,11 @@ export default function Table() {
       field: "condition",
       lookup: { NEW: "NEW", USED: "USED", PARTS: "PARTS" },
     },
-    { title: "Horse Power", field: "horsePower" },
+    { title: "Horse Power", field: "horsePower", type: "numeric" },
     { title: "Color", field: "color" },
-    { title: "Price $", field: "price" },
+    { title: "Price $", field: "price", type: "numeric" },
     { title: "City", field: "city" },
-    { title: "Mileage", field: "mileage" },
+    { title: "Mileage", field: "mileage", type: "numeric" },
     { title: "Extras", field: "extras" },
   ];
 
@@ -73,6 +73,12 @@ export default function Table() {
         options={{
           actionsColumnIndex: -1,
         }}
+        // actions={[
+        //   (rowData) => ({
+        //     icon: "delete",
+        //     disabled: rowData.user.id !== userInfo.id,
+        //   }),
+        // ]}
         editable={{
           onRowAdd: userInfo
             ? (newData) =>
@@ -89,29 +95,18 @@ export default function Table() {
           onRowDelete: userInfo
             ? (oldData) =>
                 new Promise((resolve, reject) => {
-                  if (oldData.user.id !== userInfo.id) {
-                    alert("Not the owner");
-                    reject();
-                  } else {
-                    dispatch(
-                      deleteCarsAsync(oldData.id, userInfo.id, token, cars)
-                    );
-                    resolve();
-                  }
+                  dispatch(
+                    deleteCarsAsync(oldData.id, userInfo.id, token, cars)
+                  );
+                  resolve();
                 })
             : null,
+
           onRowUpdate: currentUser.user
             ? (newData, oldData) =>
                 new Promise((resolve, reject) => {
-                  if (oldData.user.id !== userInfo.id) {
-                    alert("Not the owner");
-                    reject();
-                  } else {
-                    dispatch(
-                      updateCarsAsync(newData, userInfo.id, token, cars)
-                    );
-                    resolve();
-                  }
+                  dispatch(updateCarsAsync(newData, userInfo.id, token, cars));
+                  resolve();
                 })
             : null,
         }}
